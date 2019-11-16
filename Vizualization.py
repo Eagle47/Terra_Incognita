@@ -22,6 +22,34 @@ class Player(turtle.Turtle):
         self.penup()
         self.speed('fastest')
 
+    def up(self):
+        x_new = self.xcor()
+        y_new = self.ycor() + 24
+
+        if (x_new, y_new) not in walls:
+            self.goto(x_new, y_new)
+
+    def down(self):
+        x_new = self.xcor()
+        y_new = self.ycor() - 24
+
+        if (x_new, y_new) not in walls:
+            self.goto(x_new, y_new)
+
+    def left(self):
+        x_new = self.xcor() - 24
+        y_new = self.ycor()
+
+        if (x_new, y_new) not in walls:
+            self.goto(x_new, y_new)
+
+    def right(self):
+        x_new = self.xcor() + 24
+        y_new = self.ycor()
+
+        if (x_new, y_new) not in walls:
+            self.goto(x_new, y_new)
+
 
 lvl = [
     'WWWWWWWWWWWWWWW',
@@ -52,6 +80,7 @@ def create_maze(level):
             if cell == 'W':
                 pen.goto(screen_x, screen_y)
                 pen.stamp()
+                walls.append((screen_x, screen_y))
 
             if cell == 'P':
                 player.goto(screen_x, screen_y)
@@ -60,7 +89,15 @@ def create_maze(level):
 pen = Pen()
 player = Player()
 
+walls = []
+
 create_maze(lvl)
 
+turtle.listen()
+turtle.onkey(player.left, "a")
+turtle.onkey(player.right, 'd')
+turtle.onkey(player.up, 'w')
+turtle.onkey(player.down, 's')
+
 while True:
-    pass
+    window.update()
