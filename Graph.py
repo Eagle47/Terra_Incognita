@@ -1,28 +1,42 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-number_of_cells = 2
 
-G = nx.Graph()
-for i in range(1, number_of_cells + 1):
-    for j in range(1, number_of_cells + 1):
-        G.add_node(i * 10 + j)
-print('===Graph is created===')
-print(f'Number of nodes: {G.number_of_nodes()}')
+class Graph:
+    def __init__(self, _number_of_cells):
+        self.cells = _number_of_cells
+        self.g = nx.Graph()
+        print('===Graph is created===')
 
+        for i in range(1, self.cells + 1):
+            for j in range(1, self.cells + 1):
+                self.g.add_node(i * 10 + j)
+        print(f'Number of nodes: {self.g.number_of_nodes()}')
+
+    def is_connected(self):
+        return nx.is_connected(self.g)
+
+    def add_edge(self, _edge):
+        self.g.add_edge(_edge[0], _edge[1])
+
+
+print('Enter number of cells')
+number_of_cells = input()
+
+G = Graph(int(number_of_cells))
+
+print('Enter edges')
 while True:
     edge = tuple(map(int, input().split()))
     if edge == ():
-        if nx.is_connected(G):
-            print(f'Graph is connected: {nx.is_connected(G)}')
+        if G.is_connected():
+            print('Graph is connected.')
             break
         else:
-            print(f'Graph is connected: {nx.is_connected(G)}')
-            print('!!! Add more edges !!!')
+            print('Graph is not connected')
             continue
-    G.add_edge(edge[0], edge[1])
-    print(f'Got the edge: {edge}')
-print('==Edges are added===')
+    G.add_edge(edge)
 
-nx.draw(G, with_labels=True)
+
+nx.draw(G.g, with_labels=True)
 plt.savefig('graph.png')
