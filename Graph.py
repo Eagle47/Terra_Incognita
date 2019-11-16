@@ -20,14 +20,16 @@ class Graph:
         self.g.add_edge(_edge[0], _edge[1])
 
 
+f = open('input.txt', 'r')
+
 print('Enter number of cells')
-number_of_cells = input()
+number_of_cells = f.readline()
 
 G = Graph(int(number_of_cells))
 
 print('Enter edges')
 while True:
-    edge = tuple(map(int, input().split()))
+    edge = tuple(map(int, f.readline().split()))
     if edge == ():
         if G.is_connected():
             print('Graph is connected.')
