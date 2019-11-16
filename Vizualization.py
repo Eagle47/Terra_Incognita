@@ -18,7 +18,7 @@ class Player(turtle.Turtle):
     def __init__(self):
         turtle.Turtle.__init__(self)
         self.shape('square')
-        self.color('yellow')
+        self.color('green')
         self.penup()
         self.speed('fastest')
 
@@ -50,13 +50,36 @@ class Player(turtle.Turtle):
         if (x_new, y_new) not in walls:
             self.goto(x_new, y_new)
 
+    def is_collision(self, obj):
+        dx = self.xcor() - obj.xcor()
+        dy = self.ycor() - obj.ycor()
+        distance = (dx ** 2 + dy ** 2) ** (1/2)
+
+        if distance == 0:
+            return True
+        else:
+            return False
+
+
+class Treasure(turtle.Turtle):
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.shape('circle')
+        self.color('yellow')
+        self.penup()
+        self.speed('fastest')
+
+    def destroy(self):
+        self.goto(1000, 1000)
+        self.hideturtle()
+
 
 lvl = [
     'WWWWWWWWWWWWWWW',
     'WPW    WWW   WW',
     'W   WW   WWW WW',
     'WWWWWW WWW   WW',
-    'W      WWW WWWW',
+    'WT     WWW WWWW',
     'WW WWWWWWW    W',
     'WW WW   WWWWW W',
     'WW    W       W',
@@ -85,9 +108,13 @@ def create_maze(level):
             if cell == 'P':
                 player.goto(screen_x, screen_y)
 
+            if cell == 'T':
+                treasure.goto(screen_x, screen_y)
+
 
 pen = Pen()
 player = Player()
+treasure = Treasure()
 
 walls = []
 
@@ -100,4 +127,8 @@ turtle.onkey(player.up, 'w')
 turtle.onkey(player.down, 's')
 
 while True:
+    if player.is_collision(treasure):
+        print('Treasure collected!')
+        treasure.destroy()
+
     window.update()
