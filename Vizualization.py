@@ -6,16 +6,16 @@ window.setup(600, 600)
 
 
 class Pen(turtle.Turtle):
-    def __init__(self):
+    def __init__(self, color):
         turtle.Turtle.__init__(self)
         self.shape('square')
-        self.color('white')
+        self.color(color)
         self.penup()
         self.speed('fastest')
 
 
 class Player(turtle.Turtle):
-    def __init__(self):
+    def __init__(self, pen_b):
         turtle.Turtle.__init__(self)
         self.shape('square')
         self.color('green')
@@ -28,6 +28,8 @@ class Player(turtle.Turtle):
 
         if (x_new, y_new) not in walls:
             self.goto(x_new, y_new)
+            pen_b.goto(x_new, y_new)
+            pen_b.stamp()
 
     def down(self):
         x_new = self.xcor()
@@ -35,6 +37,8 @@ class Player(turtle.Turtle):
 
         if (x_new, y_new) not in walls:
             self.goto(x_new, y_new)
+            pen_b.goto(x_new, y_new)
+            pen_b.stamp()
 
     def left(self):
         x_new = self.xcor() - 24
@@ -42,6 +46,8 @@ class Player(turtle.Turtle):
 
         if (x_new, y_new) not in walls:
             self.goto(x_new, y_new)
+            pen_b.goto(x_new, y_new)
+            pen_b.stamp()
 
     def right(self):
         x_new = self.xcor() + 24
@@ -49,6 +55,8 @@ class Player(turtle.Turtle):
 
         if (x_new, y_new) not in walls:
             self.goto(x_new, y_new)
+            pen_b.goto(x_new, y_new)
+            pen_b.stamp()
 
     def is_collision(self, obj):
         dx = self.xcor() - obj.xcor()
@@ -100,20 +108,24 @@ def create_maze(level):
             screen_x = -168 + (x * 24)
             screen_y = 168 - (y * 24)
 
+            pen_w.goto(screen_x, screen_y)
+            pen_w.stamp()
+
             if cell == 'W':
-                pen.goto(screen_x, screen_y)
-                pen.stamp()
                 walls.append((screen_x, screen_y))
 
             if cell == 'P':
+                pen_b.goto(screen_x, screen_y)
+                pen_b.stamp()
                 player.goto(screen_x, screen_y)
 
             if cell == 'T':
                 treasure.goto(screen_x, screen_y)
 
 
-pen = Pen()
-player = Player()
+pen_w = Pen('white')
+pen_b = Pen('black')
+player = Player(pen_b)
 treasure = Treasure()
 
 walls = []
