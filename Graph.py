@@ -1,8 +1,7 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
-class Graph:
+class Graph(nx.Graph):
     def __init__(self, _number_of_cells):
         self.cells = _number_of_cells
         self.g = nx.Graph()
@@ -13,32 +12,33 @@ class Graph:
                 self.g.add_node(i * 10 + j)
         print(f'Number of nodes: {self.g.number_of_nodes()}')
 
-    def is_connected(self):
-        return nx.is_connected(self.g)
 
-    def add_edge(self, _edge):
-        self.g.add_edge(_edge[0], _edge[1])
+g = nx.Graph()
+number_of_cells = input('Enter number of cells: ')
 
 
-f = open('input.txt', 'r')
+def main():
+    f = open('input.txt', 'r')
 
-print('Enter number of cells')
-number_of_cells = f.readline()
+    print('Enter number of cells')
+    number_of_cells = f.readline()
 
-G = Graph(int(number_of_cells))
+    g = Graph(int(number_of_cells))
 
-print('Enter edges')
-while True:
-    edge = tuple(map(int, f.readline().split()))
-    if edge == ():
-        if G.is_connected():
-            print('Graph is connected.')
-            break
-        else:
-            print('Graph is not connected')
-            continue
-    G.add_edge(edge)
+    print('Enter edges')
+    while True:
+        edge1, edge2 = map(int, f.readline().split())
+        if edge1 and edge2:
+            if g.is_connected():
+                print('Graph is connected.')
+                break
+            else:
+                print('Graph is not connected')
+                continue
+        g.add_edge((edge1, edge2))
+
+    return g
 
 
-nx.draw(G.g, with_labels=True)
-plt.savefig('graph.png')
+if __name__ == '__main__':
+    main()
