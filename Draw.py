@@ -1,5 +1,7 @@
 import pygame
 import sys
+from Core import make_a_move
+from Client import maze, player_maze, start
 
 FPS = 60
 W = 640
@@ -13,8 +15,11 @@ NODES = 8
 step_x = W // NODES
 step_y = H // NODES
 side = 20
-x = W // NODES * 0.5 - side // 2
-y = H // NODES * 0.5 - side // 2
+left_corner_x = step_x * 0.5 - side // 2
+left_corner_y = step_y * 0.5 - side // 2
+
+x = left_corner_x + step_x * (start[0] - 1)
+y = left_corner_y + step_y * (start[1] - 1)
 
 
 def make_grid(width, height, screen):
@@ -25,7 +30,19 @@ def make_grid(width, height, screen):
 
 
 def move_x(screen, surface, rect, step):
-    if 0 <= (rect.x + step) <= W:
+    curr_pos = (rect.x // step_x + 1, rect.y // step_y + 1)
+    if step > 0:
+        way = 3
+        next_pos = (curr_pos[0] + 1, curr_pos[1])
+        new_pos = make_a_move(maze, player_maze, next_pos, curr_pos)
+    else:
+        way = 9
+        next_pos = (curr_pos[0] - 1, curr_pos[1])
+        new_pos = make_a_move(maze, player_maze, next_pos, curr_pos)
+
+    if new_pos == curr_pos:
+        draw_wall(screen, rect, way)
+    elif 0 <= (rect.x + step) <= W:
         surface.fill(WHITE)
         screen.blit(surface, rect)
         rect.move_ip(step, 0)
@@ -34,12 +51,48 @@ def move_x(screen, surface, rect, step):
 
 
 def move_y(screen, surface, rect, step):
-    if 0 <= (rect.y + step) <= H:
+    curr_pos = (rect.x // step_x + 1, rect.y // step_y + 1)
+    if step > 0:
+        way = 6
+        next_pos = (curr_pos[0], curr_pos[1] + 1)
+        new_pos = make_a_move(maze, player_maze, next_pos, curr_pos)
+    else:
+        way = 0
+        next_pos = (curr_pos[0], curr_pos[1] - 1)
+        new_pos = make_a_move(maze, player_maze, next_pos, curr_pos)
+
+    if new_pos == curr_pos:
+        draw_wall(screen, rect, way)
+    elif 0 <= (rect.y + step) <= H:
         surface.fill(WHITE)
         screen.blit(surface, rect)
         rect.move_ip(0, step)
         surface.fill(PURPLE)
         screen.blit(surface, rect)
+
+
+def draw_wall(screen, rect, way):
+    if way == 0:
+        start_x = rect.x - step_x / 2 + side // 2
+        start_y = rect.y - step_y / 2 + side // 2
+        end_x = rect.x + step_x / 2 + side // 2
+        end_y = rect.y - step_y / 2 + side // 2
+    elif way == 6:
+        start_x = rect.x - step_x / 2 + side // 2
+        start_y = rect.y + step_y / 2 + side // 2
+        end_x = rect.x + step_x / 2 + side // 2
+        end_y = rect.y + step_y / 2 + side // 2
+    elif way == 3:
+        start_x = rect.x + step_x / 2 + side // 2
+        start_y = rect.y - step_y / 2 + side // 2
+        end_x = rect.x + step_x / 2 + side // 2
+        end_y = rect.y + step_y / 2 + side // 2
+    elif way == 9:
+        start_x = rect.x - step_x / 2 + side // 2
+        start_y = rect.y - step_y / 2 + side // 2
+        end_x = rect.x - step_x / 2 + side // 2
+        end_y = rect.y + step_y / 2 + side // 2
+    pygame.draw.line(screen, BLACK, (start_x, start_y), (end_x, end_y), 5)
 
 
 pygame.init()
