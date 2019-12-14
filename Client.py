@@ -1,5 +1,5 @@
 from Core import create_maze, make_a_move, is_over
-from Draw import screen_init, make_grid, display_flip
+from Draw_old import screen_init, make_grid, display_flip
 import threading
 
 
