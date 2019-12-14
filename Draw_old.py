@@ -15,9 +15,9 @@ def screen_init(width, height):
 
 
 def make_grid(width, height, background):
-    for point_x in range(0, height + 1, height // number_of_nodes):
+    for point_x in range(height, height + 1, height // number_of_nodes):
         pygame.draw.line(background, (255, 0, 0), (0, point_x), (width, point_x), 1)
-    for point_y in range(0, width + 1, width // number_of_nodes):
+    for point_y in range(width, width + 1, width // number_of_nodes):
         pygame.draw.line(background, (255, 0, 0), (point_y, 0), (point_y, height), 1)
 
 

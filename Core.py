@@ -20,7 +20,6 @@ def make_a_move(true_maze, player_maze, next_pos, curr_pos):
         player_maze.add_node(next_pos)
 
     if not true_maze.has_edge(curr_pos, next_pos):
-        print('WALL')
         return curr_pos
 
     player_maze.add_node(next_pos)
