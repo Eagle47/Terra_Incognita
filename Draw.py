@@ -1,7 +1,7 @@
 import pygame
 import sys
 from Core import make_a_move
-from Client import maze, player_maze, start
+from Client import maze, player_maze, start, number_of_nodes
 
 FPS = 60
 W = 640
@@ -10,7 +10,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 PURPLE = (255, 0, 255)
-NODES = 8
+NODES = number_of_nodes
 
 step_x = W // NODES
 step_y = H // NODES
