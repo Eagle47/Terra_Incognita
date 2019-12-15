@@ -1,4 +1,4 @@
-from Core import create_maze, make_a_move, is_over
+from Core import create_maze
 
 f = open('input8.txt', 'r')
 number_of_nodes = int(f.readline())

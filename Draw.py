@@ -1,6 +1,6 @@
 import pygame
 import sys
-from Core import make_a_move, is_over
+from Core import make_a_move
 from Client import maze, player_maze, start, end, number_of_nodes
 
 W = 640
@@ -8,7 +8,7 @@ H = 480
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
+GREEN = (0, 128, 0)
 PURPLE = (255, 0, 255)
 LAVENDER = (230, 230, 250)
 GREY = (230, 230, 250)
@@ -55,11 +55,9 @@ def move_x(screen, surface, rect, step):
         rect.move_ip(step, 0)
         surface.fill(PURPLE)
         screen.blit(surface, rect)
-        pygame
-
-    if new_pos == curr_pos:
+    elif new_pos == curr_pos:
         draw_wall(screen, rect, way)
-    elif 0 <= (rect.x + step) <= W:
+    else:
         surface.fill(WHITE)
         screen.blit(surface, rect)
         rect.move_ip(step, 0)
@@ -78,16 +76,9 @@ def move_y(screen, surface, rect, step):
         next_pos = (curr_pos[0], curr_pos[1] - 1)
         new_pos = make_a_move(maze, player_maze, next_pos, curr_pos)
 
-    if new_pos == tuple(end[2:]):
-        surface.fill(WHITE)
-        screen.blit(surface, rect)
-        rect.move_ip(1000, 1000)
-        surface.fill(PURPLE)
-        screen.blit(surface, rect)
-
     if new_pos == curr_pos:
         draw_wall(screen, rect, way)
-    elif 0 <= (rect.y + step) <= H:
+    else:
         surface.fill(WHITE)
         screen.blit(surface, rect)
         rect.move_ip(0, step)
@@ -132,9 +123,9 @@ player_rect = pygame.Rect((x, y, side, side))
 player_surface = pygame.Surface((player_rect.width, player_rect.height))
 player_surface.fill(PURPLE)
 
-font = pygame.font.Font(None, 20)
-steps_text = font.render('Steps: ', 1, BLACK)
-number_of_steps_text = font.render(str(steps), 1, BLACK)
+font1 = pygame.font.Font(None, 20)
+steps_text = font1.render('Steps: ', 1, BLACK)
+number_of_steps_text = font1.render(str(steps), 1, BLACK)
 steps_rect = pygame.Rect((0, 0, step_x, step_y))
 
 screen.blit(player_surface, player_rect)
@@ -143,7 +134,10 @@ background.blit(steps_text, (5, 10))
 background.blit(number_of_steps_text, (45, 10))
 pygame.display.update()
 
-while True:
+game = True
+is_over = False
+
+while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -162,10 +156,26 @@ while True:
                 move_y(screen, player_surface, player_rect, -step_y)
                 steps += 1
 
-    number_of_steps_text = font.render(str(steps), 1, BLACK)
+    if (player_rect.x // step_x + 1, player_rect.y // step_y + 1) == (end[2], end[3]):
+        game = False
+        is_over = True
+
+    number_of_steps_text = font1.render(str(steps), 1, BLACK)
     pygame.draw.rect(background, LAVENDER, steps_rect)
 
     background.blit(steps_text, (5, 10))
     background.blit(number_of_steps_text, (45, 10))
     background.blit(screen, (maze_x, maze_y))
+    pygame.display.update()
+
+font2 = pygame.font.Font(None, 72)
+is_over_text = font2.render("You've won!", 1, GREEN)
+
+while is_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    background.blit(is_over_text, (maze_size // 2 - 60, maze_size // 2 - 36))
     pygame.display.update()
